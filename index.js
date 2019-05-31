@@ -9,42 +9,33 @@ var tokenKey = 'f$i1nt#ec1hT@oke1n!Key'
 var connection = mysql.createConnection({
   host     : '127.0.0.1',
   user     : 'root',
-  password : 'q1w2e3r4',
+  password : '201514204',
   database : 'fintech'
 });
-
 connection.connect();
+
 app.use(express.static(__dirname + '/public'));
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended:false}));
-
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 app.engine('html', require('ejs').renderFile);
-
 app.get('/', function (req, res) {
     res.render('index')
 })
-
-
-
 app.get('/login', function(req, res){
     res.render('login');
 })
-
 app.get('/qr', function(req, res){
     res.render('qr');
 })
-
 app.get('/withdraw', function(req, res){
     res.render('withdraw');
 })
-
 app.get('/join', function (req, res) {
     res.render('join')
 })
-
 app.post('/withdrawQR', auth, function (req, res) {
     var userId = req.decoded.userId;
     var finNum = req.body.qrFin;
@@ -53,8 +44,7 @@ app.post('/withdrawQR', auth, function (req, res) {
         if(err){
             console.error(err);
             throw err;
-        }
-        else {
+        } else {
             console.log(result[0].accessToken);
             var option = {
                 method : "POST",
@@ -64,10 +54,10 @@ app.post('/withdrawQR', auth, function (req, res) {
                     'Content-Type' : 'application/json; charset=UTF-8'
                 },
                 json : {
-                    dps_print_content : '널앤서',
+                    dps_print_content : '이윤성',
                     fintech_use_num : finNum,
                     tran_amt : 11000,
-                    print_content : '널앤서',
+                    print_content : '이윤성',
                     tran_dtime : '20190523101921'
                 }
             };
@@ -85,7 +75,6 @@ app.post('/withdrawQR', auth, function (req, res) {
         }
     })
 })
-
 app.post('/withdraw', auth, function (req, res) {
     var userId = req.decoded.userId;
     var finNum = '';
@@ -94,8 +83,7 @@ app.post('/withdraw', auth, function (req, res) {
         if(err){
             console.error(err);
             throw err;
-        }
-        else {
+        } else {
             console.log(result[0].accessToken);
             var option = {
                 method : "POST",
@@ -105,13 +93,16 @@ app.post('/withdraw', auth, function (req, res) {
                     'Content-Type' : 'application/json; charset=UTF-8'
                 },
                 json : {
-                    dps_print_content : '널앤서',
-                    fintech_use_num : '199003328057724253012100',
-                    tran_amt : 11000,
-                    print_content : '널앤서',
-                    tran_dtime : '20190523101921'
+                    dps_print_content : '이윤성',
+                    fintech_use_num : '199004735057725660148397',
+                    tran_amt : 1000,
+                    print_content : '이윤성',
+                    tran_dtime : '20190524170446329'
                 }
             };
+            //fd793322-9059-4828-bc06-9cbf3c01781b
+            //dde5245e-b2e4-4491-9609-48879080cc80
+            //1100035086
             request(option, function(err, response, body){
                 if(err) throw err;
                 else {
@@ -122,8 +113,7 @@ app.post('/withdraw', auth, function (req, res) {
                             if(err){
                                 console.error(err);
                                 throw err;
-                            }
-                            else {
+                            } else {
                                 res.json(1);
                             }
                         })
@@ -133,7 +123,6 @@ app.post('/withdraw', auth, function (req, res) {
         }
     })
 })
-
 app.get('/authResult', function(req, res){
     var auth_code = req.query.code
     var getTokenUrl = "https://testapi.open-platform.or.kr/oauth/2.0/token";
@@ -144,8 +133,8 @@ app.get('/authResult', function(req, res){
         },
         form : {
             code : auth_code,
-            client_id : "l7xx9aeec8195c534ad9a0ebd55aa6bc9e81",
-            client_secret : "ad78be0471d940359458864e3e15fe81",
+            client_id : "l7xx5d7bfbda5c884ab09aa63dae15eccd90",
+            client_secret : "2fcd328cf75f4ea99c975fe036cd5c6f",
             redirect_uri : "http://localhost:3000/authResult",
             grant_type : "authorization_code"
         }
@@ -160,14 +149,13 @@ app.get('/authResult', function(req, res){
         }
     })
 })
-
 app.post('/join', function(req, res){
     console.log(req);
     var name = req.body.name;
     var birthday = new Date();
     var email = req.body.email;
     var password = req.body.password;
-    var phone = "0109922";
+    var phone = req.body.phone;
     var accessToken = req.body.accessToken;
     var refreshToken = req.body.refreshToken;
     var useNum = req.body.useseqnum;
@@ -182,7 +170,6 @@ app.post('/join', function(req, res){
       }
     });
 })
-
 app.post('/login', function (req, res) {
     var userEmail = req.body.email;
     var userPassword = req.body.password;
@@ -192,7 +179,6 @@ app.post('/login', function (req, res) {
     connection.query(sql, [userEmail], function (error, results) {
       if (error) throw error;  
       else {
-
         console.log(userPassword, results[0].user_password);
         if(userPassword == results[0].user_password){
             jwt.sign(
@@ -211,18 +197,15 @@ app.post('/login', function (req, res) {
                     res.json(token)
                 }
             )            
-        }
-        else {
+        }else {
             res.json('등록정보가 없습니다');
         }
       }
     });
 })
-
 app.get('/balance', function(req, res){
     res.render('balance');
 })
-
 app.post('/transaction_list', auth, function(req,res){
     var userId = req.decoded.userId;
     var finNum = req.body.finNum;
@@ -231,8 +214,7 @@ app.post('/transaction_list', auth, function(req,res){
         if(err){
             console.error(err);
             throw err;
-        }
-        else {
+        }else {
             console.log(result[0].accessToken);
             var option = {
                 method : "GET",
@@ -258,8 +240,6 @@ app.post('/transaction_list', auth, function(req,res){
         }
     })
 })
-
-
 app.post('/balance', auth, function(req,res){
     var userId = req.decoded.userId;
     var finNum = req.body.finNum;
@@ -268,8 +248,7 @@ app.post('/balance', auth, function(req,res){
         if(err){
             console.error(err);
             throw err;
-        }
-        else {
+        } else {
             console.log(result[0].accessToken);
             var option = {
                 method : "GET",
@@ -288,11 +267,9 @@ app.post('/balance', auth, function(req,res){
         }
     })
 })
-
 app.get('/main', function(req, res){
     res.render('main');
 })
-
 app.post('/getUser', auth, function(req, res){
     var userId = req.decoded.userId;
     var sql = "SELECT userseqnum, accessToken FROM user WHERE user_id = ?";
@@ -300,8 +277,7 @@ app.post('/getUser', auth, function(req, res){
         if(err){
             console.error(err);
             throw err;
-        }
-        else {
+        }else {
             var option = {
                 method : "GET",
                 url :'https://testapi.open-platform.or.kr/user/me?user_seq_no='+ result[0].userseqnum,
@@ -318,15 +294,12 @@ app.post('/getUser', auth, function(req, res){
         }
     })
 })
-
 app.get('/tokenTest', auth ,function(req, res){
     console.log(req.decoded);
 })
-
 app.get('/ajaxTest',function(req, res){
     console.log('ajax call');
     var result = "hello";
     res.json(result);
 })
-
 app.listen(3000)

@@ -1,7 +1,6 @@
 {
   "name": "app",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -17,5 +16,18 @@
     "jsonwebtoken": "^8.5.1",
     "mysql": "^2.17.1",
     "request": "^2.88.0"
-  }
+  },
+  "directories": {
+    "lib": "lib"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/skymill2000/application.git"
+  },
+  "bugs": {
+    "url": "https://github.com/skymill2000/application/issues"
+  },
+  "homepage": "https://github.com/skymill2000/application#readme",
+  "description": ""
 }
